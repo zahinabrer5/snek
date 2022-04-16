@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snek</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <img src="img/mouse.png" id="food">
+    <img src="img/background.png" id="background">
+    <img src="img/snake/head/u.png" id="uhead">
+    <img src="img/snake/head/d.png" id="dhead">
+    <img src="img/snake/head/l.png" id="lhead">
+    <img src="img/snake/head/r.png" id="rhead">
+    <img src="img/snake/body/ud.png" id="udbody">
+    <img src="img/snake/body/lr.png" id="lrbody">
+    <img src="img/snake/tail/u.png" id="utail">
+    <img src="img/snake/tail/d.png" id="dtail">
+    <img src="img/snake/tail/l.png" id="ltail">
+    <img src="img/snake/tail/r.png" id="rtail">
+    <div id="score-disp">Score: <span id="score">1</span></div>
+    <canvas id="info" width="1000" height="600" style="z-index: 1;"></canvas>
+    <canvas id="game-screen" width="1000" height="600" style="z-index: 0;"></canvas>
+    <script src="scripts.js"></script>
+</body>
+</html>

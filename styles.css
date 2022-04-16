@@ -1,0 +1,14 @@
+canvas {
+    position: absolute;
+}
+
+img {
+    display: none;
+}
+
+#score-disp {
+    font-size: 24px;
+    font-family: monospace;
+    font-weight: bold;
+    padding-top: 10px;
+}
