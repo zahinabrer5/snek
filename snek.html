@@ -17,12 +17,14 @@
     </style>
 </head>
 <body>
+    <img src="img/mouse.png" alt="food" id="food" style="display: none;">
     <div id="score-disp">Score: <span id="score">1</span></div>
     <canvas id="info" width="1200" height="600" style="z-index: 1;"></canvas>
     <canvas id="game-screen" width="1200" height="600" style="z-index: 0;"></canvas>
     <script>
         const gameScreen = document.getElementById("game-screen");
         const info = document.getElementById("info");
+        const food = document.getElementById('food');
         const ctx = gameScreen.getContext('2d');
         const infoCtx = info.getContext('2d');
         const w = gameScreen.width;
@@ -67,8 +69,7 @@
             }
 
             // draw food
-            ctx.fillStyle = "#FF0000";
-            ctx.fillRect(foodX, foodY, cellW, cellW);
+            ctx.drawImage(food, foodX, foodY);
 
             // update and draw snake body
             let oldSnake = [...snake];
