@@ -8,6 +8,13 @@ canvas {
     position: absolute;
 }
 
+#canvas-wrapper {
+    position: relative;
+    width: 1000px;
+    height: 600px;
+    margin-bottom: 20px;
+}
+
 #game-screen {
     border: 5px solid black;
 }

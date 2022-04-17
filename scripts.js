@@ -62,6 +62,7 @@ let run = setInterval(() => {
             ctx.fillRect(snake[i][0], snake[i][1], cellW, cellW);
         }
 
+        // update and draw snake tail
         if (snake.length > 1) {
             snake[snake.length-1] = oldSnake[snake.length-2];
             ctx.drawImage(
@@ -93,39 +94,39 @@ function checkControls(e) {
         case 37: // left arrow key
             // make it so you can't go "backwards"
             // or change controls while game paused
+            e.preventDefault();
             if (lastCode != 39 && !paused) {
                 velX = -25;
                 velY = 0;
                 lastCode = code;
                 head = document.getElementById('lhead');
-                e.preventDefault();
             }
             break;
         case 38: // up arrow key
+            e.preventDefault();
             if (lastCode != 40 && !paused) {
                 velX = 0;
                 velY = -25;
                 lastCode = code;
                 head = document.getElementById('uhead');
-                e.preventDefault();
             }
             break;
         case 39: // right arrow key
+            e.preventDefault();
             if (lastCode != 37 && !paused) {
                 velX = 25;
                 velY = 0;
                 lastCode = code;
                 head = document.getElementById('rhead');
-                e.preventDefault();
             }
             break;
         case 40: // down arrow key
+            e.preventDefault();
             if (lastCode != 38 && !paused) {
                 velX = 0;
                 velY = 25;
                 lastCode = code;
                 head = document.getElementById('dhead');
-                e.preventDefault();
             }
             break;
         case 80: // P key (pause)
