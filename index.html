@@ -19,9 +19,19 @@
     <img src="img/snake/tail/d.png" id="dtail">
     <img src="img/snake/tail/l.png" id="ltail">
     <img src="img/snake/tail/r.png" id="rtail">
+    <img src="img/logo.png" id="logo">
+    <ul id="keycmds">
+        <li>Use arrow keys to move the snake</li>
+        <li>Eat the mice</li>
+        <li>Press P to pause</li>
+        <li>Press R to resume</li>
+        <li>Press Q to restart</li>
+    </ul>
     <div id="score-disp">Score: <span id="score">1</span></div>
     <canvas id="info" width="1000" height="600" style="z-index: 1;"></canvas>
-    <canvas id="game-screen" width="1000" height="600" style="z-index: 0;"></canvas>
+    <canvas id="game-screen" width="1000" height="600" style="z-index: 0;">
+        <div id="spacer"></div>
+    </canvas>
     <script src="scripts.js"></script>
 </body>
 </html>

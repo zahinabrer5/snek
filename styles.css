@@ -1,14 +1,31 @@
+body {
+    background: linear-gradient(45deg, rgba(0,255,162,0.7343312324929971) 0%, rgba(0,128,255,0.5102415966386555) 100%);
+    background-attachment: fixed;
+    font-family: monospace;
+}
+
 canvas {
     position: absolute;
 }
 
-img {
+#game-screen {
+    border: 5px solid black;
+}
+
+img:not(#logo) {
     display: none;
 }
 
 #score-disp {
     font-size: 24px;
-    font-family: monospace;
     font-weight: bold;
     padding-top: 10px;
+}
+
+#score {
+    color: red;
+}
+
+#keycmds {
+    font-size: 16px;
 }
