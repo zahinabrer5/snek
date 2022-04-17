@@ -33,7 +33,7 @@ let run = setInterval(() => {
     realY = mod(y, h);
 
     // check if snake's head has bumped into body (game over)
-    if (inSnake([realX, realY])) {
+    if (inSnake(realX, realY)) {
         infoCtx.fillStyle = "#000000";
         infoCtx.font = "bold 48px monospace";
         infoCtx.textAlign = "center";
@@ -47,15 +47,26 @@ let run = setInterval(() => {
     // draw food
     ctx.drawImage(food, foodX, foodY);
 
-    // update and draw snake body
     let oldSnake = [...snake];
-    ctx.fillStyle = "#00FF00";
-    for (let i = 1; i < snake.length; i++) {
+
+    // update and draw snake body
+    ctx.fillStyle = "#0e660e";
+    for (let i = 1; i < snake.length-1; i++) {
         snake[i] = oldSnake[i-1];
         ctx.fillRect(snake[i][0], snake[i][1], cellW, cellW);
     }
+
+    if (snake.length > 1) {
+        snake[snake.length-1] = oldSnake[snake.length-2];
+        ctx.drawImage(
+            getTail(snake[snake.length-1][2]),
+            snake[snake.length-1][0],
+            snake[snake.length-1][1]
+        );
+    }
+
     // update and draw snake head
-    snake[0] = [realX, realY];
+    snake[0] = [realX, realY, head];
     ctx.drawImage(head, realX, realY);
 
     // check if snake has eaten food
@@ -123,6 +134,14 @@ function respawnFood() {
     }
 }
 
-function inSnake(cell) {
-    return JSON.stringify(snake).includes(JSON.stringify(cell));
+function inSnake(searchX, searchY) {
+    for (let cell of snake)
+        if (cell[0] == searchX && cell[1] == searchY)
+            return true;
+    return false;
+}
+
+function getTail(headImg) {
+    let dir = headImg.src.split('/').at(-1).split('.')[0];
+    return document.getElementById(dir+'tail');
 }
