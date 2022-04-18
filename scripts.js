@@ -157,7 +157,7 @@ function checkControls(e) {
 function respawnFood() {
     foodX = Math.floor(w/cellW * Math.random()) * cellW;
     foodY = Math.floor(h/cellW * Math.random()) * cellW;
-    while (inSnake([foodX, foodY])) {
+    while (inSnake(foodX, foodY)) {
         foodX = Math.floor(w/cellW * Math.random()) * cellW;
         foodY = Math.floor(h/cellW * Math.random()) * cellW;
     }
