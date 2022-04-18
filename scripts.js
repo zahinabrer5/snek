@@ -1,14 +1,12 @@
-const gameScreen = document.getElementById("game-screen");
-const info = document.getElementById("info");
-const food = document.getElementById('food');
-const background = document.getElementById('background');
-const ctx = gameScreen.getContext('2d');
+const screen = document.getElementById('screen');
+const ctx = screen.getContext('2d');
+const info = document.getElementById('info');
 const infoCtx = info.getContext('2d');
-const w = gameScreen.width;
-const h = gameScreen.height;
+const w = screen.width;
+const h = screen.height;
 const cellW = 25;
 
-window.addEventListener("keydown", this.checkControls, false);
+addEventListener('keydown', checkControls, false);
 
 // use modulus instead of remainder
 const mod = (a, b) => ((a % b) + b) % b;
@@ -24,8 +22,10 @@ let realY;
 let snake = [];
 let lastCode = 39;
 respawnFood();
-let head = document.getElementById('rhead');
+let head = rhead;
 let paused = false;
+hscore.innerHTML = localStorage.getItem('snekHighScore');
+let oldHigh = hscore.innerHTML;
 
 // main game interval
 let run = setInterval(() => {
@@ -33,20 +33,26 @@ let run = setInterval(() => {
         // fill background
         ctx.drawImage(background, 0, 0);
 
-        // "real" coordinates used to draw snake
+        // 'real' coordinates used to draw snake
         realX = mod(x, w);
         realY = mod(y, h);
 
         // check if snake's head has bumped into body (game over)
         if (inSnake(realX, realY)) {
-            infoCtx.fillStyle = "#000000";
-            infoCtx.font = "bold 48px monospace";
-            infoCtx.textAlign = "center";
-            infoCtx.textBaseline = "middle";
-            infoCtx.fillText("GAME OVER", w/2, h/2-72);
-            infoCtx.font = "bold 24px monospace";
+            infoCtx.fillStyle = '#000000';
+            infoCtx.font = 'bold 48px monospace';
+            infoCtx.textAlign = 'center';
+            infoCtx.textBaseline = 'middle';
+            infoCtx.fillText('GAME OVER', w/2, h/2-72);
+            infoCtx.font = 'bold 24px monospace';
             infoCtx.fillText(`Final Score: ${snake.length}`, w/2, h/2+48);
-            infoCtx.fillText("Press Q to restart", w/2, h/2+72);
+            infoCtx.fillText('Press Q to restart', w/2, h/2+72);
+
+            if (hscore.innerHTML > oldHigh) {
+                infoCtx.fillStyle = '#FFFF00';
+                infoCtx.fillText('NEW HIGH SCORE!!!', w/2, h/2+120);
+            }
+
             clearInterval(run);
         }
 
@@ -56,7 +62,7 @@ let run = setInterval(() => {
         let oldSnake = [...snake];
 
         // update and draw snake body
-        ctx.fillStyle = "#0e660e";
+        ctx.fillStyle = '#0e660e';
         for (let i = 1; i < snake.length-1; i++) {
             snake[i] = oldSnake[i-1];
             ctx.fillRect(snake[i][0], snake[i][1], cellW, cellW);
@@ -81,6 +87,11 @@ let run = setInterval(() => {
             respawnFood();
             snake.push([realX, realY]);
             score.innerHTML = snake.length;
+
+            if (score.innerHTML > hscore.innerHTML) {
+                hscore.innerHTML = score.innerHTML;
+                localStorage.setItem('snekHighScore', snake.length);
+            }
         }
 
         x += velX;
@@ -92,14 +103,14 @@ function checkControls(e) {
     let code = e.keyCode;
     switch (code) {
         case 37: // left arrow key
-            // make it so you can't go "backwards"
+            // make it so you can't go 'backwards'
             // or change controls while game paused
             e.preventDefault();
             if (lastCode != 39 && !paused) {
                 velX = -25;
                 velY = 0;
                 lastCode = code;
-                head = document.getElementById('lhead');
+                head = lhead;
             }
             break;
         case 38: // up arrow key
@@ -108,7 +119,7 @@ function checkControls(e) {
                 velX = 0;
                 velY = -25;
                 lastCode = code;
-                head = document.getElementById('uhead');
+                head = uhead;
             }
             break;
         case 39: // right arrow key
@@ -117,7 +128,7 @@ function checkControls(e) {
                 velX = 25;
                 velY = 0;
                 lastCode = code;
-                head = document.getElementById('rhead');
+                head = rhead;
             }
             break;
         case 40: // down arrow key
@@ -126,7 +137,7 @@ function checkControls(e) {
                 velX = 0;
                 velY = 25;
                 lastCode = code;
-                head = document.getElementById('dhead');
+                head = dhead;
             }
             break;
         case 80: // P key (pause)

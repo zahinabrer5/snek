@@ -15,7 +15,7 @@ canvas {
     margin-bottom: 20px;
 }
 
-#game-screen {
+#screen {
     border: 5px solid black;
 }
 
@@ -31,6 +31,10 @@ img:not(#logo) {
 
 #score {
     color: red;
+}
+
+#hscore {
+    color: yellow;
 }
 
 #keycmds {
