@@ -48,7 +48,7 @@ let run = setInterval(() => {
             infoCtx.fillText(`Final Score: ${snake.length}`, w/2, h/2+48);
             infoCtx.fillText('Press Q to restart', w/2, h/2+72);
 
-            if (hscore.innerHTML > oldHigh) {
+            if (Number(hscore.innerHTML) > Number(oldHigh)) {
                 infoCtx.fillStyle = '#FFFF00';
                 infoCtx.fillText('NEW HIGH SCORE!!!', w/2, h/2+120);
             }
@@ -88,7 +88,7 @@ let run = setInterval(() => {
             snake.push([realX, realY]);
             score.innerHTML = snake.length;
 
-            if (score.innerHTML > hscore.innerHTML) {
+            if (Number(score.innerHTML) > Number(hscore.innerHTML)) {
                 hscore.innerHTML = score.innerHTML;
                 localStorage.setItem('snekHighScore', snake.length);
             }
