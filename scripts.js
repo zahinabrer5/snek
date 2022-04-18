@@ -1,7 +1,7 @@
 const screen = document.getElementById('screen');
 const ctx = screen.getContext('2d');
-const info = document.getElementById('info');
-const infoCtx = info.getContext('2d');
+const infoCtx = document.getElementById('info').getContext('2d');
+const pausedCtx = document.getElementById('paused').getContext('2d');
 const w = screen.width;
 const h = screen.height;
 const cellW = 25;
@@ -113,6 +113,7 @@ function checkControls(e) {
                 head = lhead;
             }
             break;
+
         case 38: // up arrow key
             e.preventDefault();
             if (lastCode != 40 && !paused) {
@@ -122,6 +123,7 @@ function checkControls(e) {
                 head = uhead;
             }
             break;
+
         case 39: // right arrow key
             e.preventDefault();
             if (lastCode != 37 && !paused) {
@@ -131,6 +133,7 @@ function checkControls(e) {
                 head = rhead;
             }
             break;
+
         case 40: // down arrow key
             e.preventDefault();
             if (lastCode != 38 && !paused) {
@@ -140,15 +143,27 @@ function checkControls(e) {
                 head = dhead;
             }
             break;
+
         case 80: // P key (pause)
             paused = true;
+            pausedCtx.fillStyle = '#000000';
+            pausedCtx.font = 'bold 48px monospace';
+            pausedCtx.textAlign = 'center';
+            pausedCtx.textBaseLine = 'middle';
+            pausedCtx.fillText('Paused', w/2, h/2);
+            pausedCtx.font = 'bold 24px monospace';
+            pausedCtx.fillText('Press R to resume', w/2, h/2+48);
             break;
+
         case 82: // R key (resume)
             paused = false;
+            pausedCtx.clearRect(0, 0, w, h);
             break;
+
         case 81: // Q key (restart)
             window.location.reload();
             break;
+
         default:
             break;
     }
