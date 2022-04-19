@@ -6,7 +6,37 @@ const w = screen.width;
 const h = screen.height;
 const cellW = 25;
 
-addEventListener('keydown', checkControls, false);
+let moveQueue = [];
+addEventListener('keydown', e => {
+    e.preventDefault();
+
+    switch (e.key) {
+        case 'p':
+            paused = true;
+            pausedCtx.fillStyle = '#000000';
+            pausedCtx.font = 'bold 48px monospace';
+            pausedCtx.textAlign = 'center';
+            pausedCtx.textBaseLine = 'middle';
+            pausedCtx.fillText('Paused', w/2, h/2);
+            pausedCtx.font = 'bold 24px monospace';
+            pausedCtx.fillText('Press R to resume', w/2, h/2+48);
+            break;
+
+        case 'r':
+            paused = false;
+            pausedCtx.clearRect(0, 0, w, h);
+            break;
+
+        case 'q':
+            window.location.reload();
+            break;
+
+        default:
+            break;
+    }
+
+    moveQueue.push(e.key);
+}, false);
 
 // use modulus instead of remainder
 const mod = (a, b) => ((a % b) + b) % b;
@@ -20,7 +50,7 @@ let foodY;
 let realX;
 let realY;
 let snake = [];
-let lastCode = 39;
+let lastMove = 'right';
 respawnFood();
 let head = rhead;
 let paused = false;
@@ -97,76 +127,56 @@ let run = setInterval(() => {
         x += velX;
         y += velY;
     }
-}, 100);
+    moveSnake();
+}, 75);
 
-function checkControls(e) {
-    let code = e.keyCode;
-    switch (code) {
-        case 37: // left arrow key
+function moveSnake() {
+    if (moveQueue.length == 0) return;
+    let move = moveQueue[0].length > 1 ? moveQueue[0].substring(5) : moveQueue[0];
+    move = move.toLowerCase();
+    switch (move) {
+        case 'left':
             // make it so you can't go 'backwards'
             // or change controls while game paused
-            e.preventDefault();
-            if (lastCode != 39 && !paused) {
-                velX = -25;
+            if (lastMove != 'right' && !paused) {
+                velX = -cellW;
                 velY = 0;
-                lastCode = code;
+                lastMove = move;
                 head = lhead;
             }
             break;
 
-        case 38: // up arrow key
-            e.preventDefault();
-            if (lastCode != 40 && !paused) {
+        case 'up':
+            if (lastMove != 'down' && !paused) {
                 velX = 0;
-                velY = -25;
-                lastCode = code;
+                velY = -cellW;
+                lastMove = move;
                 head = uhead;
             }
             break;
 
-        case 39: // right arrow key
-            e.preventDefault();
-            if (lastCode != 37 && !paused) {
-                velX = 25;
+        case 'right':
+            if (lastMove != 'left' && !paused) {
+                velX = cellW;
                 velY = 0;
-                lastCode = code;
+                lastMove = move;
                 head = rhead;
             }
             break;
 
-        case 40: // down arrow key
-            e.preventDefault();
-            if (lastCode != 38 && !paused) {
+        case 'down':
+            if (lastMove != 'up' && !paused) {
                 velX = 0;
-                velY = 25;
-                lastCode = code;
+                velY = cellW;
+                lastMove = move;
                 head = dhead;
             }
-            break;
-
-        case 80: // P key (pause)
-            paused = true;
-            pausedCtx.fillStyle = '#000000';
-            pausedCtx.font = 'bold 48px monospace';
-            pausedCtx.textAlign = 'center';
-            pausedCtx.textBaseLine = 'middle';
-            pausedCtx.fillText('Paused', w/2, h/2);
-            pausedCtx.font = 'bold 24px monospace';
-            pausedCtx.fillText('Press R to resume', w/2, h/2+48);
-            break;
-
-        case 82: // R key (resume)
-            paused = false;
-            pausedCtx.clearRect(0, 0, w, h);
-            break;
-
-        case 81: // Q key (restart)
-            window.location.reload();
             break;
 
         default:
             break;
     }
+    moveQueue.shift();
 }
 
 function respawnFood() {
