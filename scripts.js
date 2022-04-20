@@ -1,12 +1,12 @@
 const screen = document.getElementById('screen');
 const ctx = screen.getContext('2d', { alpha: false });
-const gameOverCtx = document.getElementById('game-over').getContext('2d');
 const pausedCtx = document.getElementById('paused').getContext('2d');
+const gameOverCtx = document.getElementById('game-over').getContext('2d');
 const w = screen.width;
 const h = screen.height;
 const cellW = 25;
 
-let moveQueue = [];
+let moveQueue = []; // keyboard buffer
 let isPaused = false;
 addEventListener('keydown', e => {
     e.preventDefault();
@@ -20,25 +20,33 @@ addEventListener('keydown', e => {
                 pausedCtx.fillText('Paused', w/2, h/2);
                 pausedCtx.font = 'bold 24px monospace';
                 pausedCtx.fillText('Press R to resume', w/2, h/2+48);
+                isPaused = true;
             }
-            isPaused = true;
             break;
 
         case 'r':
-            if (isPaused)
+            if (isPaused) {
                 pausedCtx.clearRect(0, 0, w, h);
-            isPaused = false;
-            break;
-
-        case 'q':
-            window.location.reload();
+                isPaused = false;
+            }
             break;
 
         default:
-            if (e.key.startsWith('Arrow'))
-                moveQueue.push(e.key.substring(5).toLowerCase());
+            if (e.key.startsWith('Arrow')) {
+                let move = e.key.substring(5).toLowerCase();
+                // add to buffer if not already in buffer
+                if (moveQueue[moveQueue.length-1] != move)
+                    moveQueue.push(move);
+            }
             break;
     }
+}, false);
+
+// 'keyup' prevents users from spamming reload by holding Q
+addEventListener('keyup', e => {
+    e.preventDefault();
+    if (e.key.toLowerCase() == 'q')
+        window.location.reload();
 }, false);
 
 // use modulus instead of remainder
@@ -135,6 +143,7 @@ let run = setInterval(() => {
 function moveSnake() {
     if (moveQueue.length == 0) return;
     let move = moveQueue[0];
+    console.log(moveQueue); // for debugging
     switch (move) {
         case 'left':
             // make it so you can't go 'backwards'
