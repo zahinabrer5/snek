@@ -7,24 +7,27 @@ const h = screen.height;
 const cellW = 25;
 
 let moveQueue = [];
+let isPaused = false;
 addEventListener('keydown', e => {
     e.preventDefault();
-
     switch (e.key) {
         case 'p':
-            paused = true;
-            pausedCtx.fillStyle = '#000000';
-            pausedCtx.font = 'bold 48px monospace';
-            pausedCtx.textAlign = 'center';
-            pausedCtx.textBaseLine = 'middle';
-            pausedCtx.fillText('Paused', w/2, h/2);
-            pausedCtx.font = 'bold 24px monospace';
-            pausedCtx.fillText('Press R to resume', w/2, h/2+48);
+            if (!isPaused) {
+                pausedCtx.fillStyle = '#000000';
+                pausedCtx.font = 'bold 48px monospace';
+                pausedCtx.textAlign = 'center';
+                pausedCtx.textBaseLine = 'middle';
+                pausedCtx.fillText('Paused', w/2, h/2);
+                pausedCtx.font = 'bold 24px monospace';
+                pausedCtx.fillText('Press R to resume', w/2, h/2+48);
+            }
+            isPaused = true;
             break;
 
         case 'r':
-            paused = false;
-            pausedCtx.clearRect(0, 0, w, h);
+            if (isPaused)
+                pausedCtx.clearRect(0, 0, w, h);
+            isPaused = false;
             break;
 
         case 'q':
@@ -32,10 +35,10 @@ addEventListener('keydown', e => {
             break;
 
         default:
+            if (e.key.startsWith('Arrow'))
+                moveQueue.push(e.key.substring(5).toLowerCase());
             break;
     }
-
-    moveQueue.push(e.key);
 }, false);
 
 // use modulus instead of remainder
@@ -53,13 +56,12 @@ let snake = [];
 let lastMove = 'right';
 respawnFood();
 let head = rhead;
-let paused = false;
 hscore.innerHTML = localStorage.getItem('snekHighScore');
 let oldHigh = hscore.innerHTML;
 
 // main game interval
 let run = setInterval(() => {
-    if (!paused) {
+    if (!isPaused) {
         // fill background
         ctx.drawImage(background, 0, 0);
 
@@ -132,13 +134,12 @@ let run = setInterval(() => {
 
 function moveSnake() {
     if (moveQueue.length == 0) return;
-    let move = moveQueue[0].length > 1 ? moveQueue[0].substring(5) : moveQueue[0];
-    move = move.toLowerCase();
+    let move = moveQueue[0];
     switch (move) {
         case 'left':
             // make it so you can't go 'backwards'
             // or change controls while game paused
-            if (lastMove != 'right' && !paused) {
+            if (lastMove != 'right' && !isPaused) {
                 velX = -cellW;
                 velY = 0;
                 lastMove = move;
@@ -147,7 +148,7 @@ function moveSnake() {
             break;
 
         case 'up':
-            if (lastMove != 'down' && !paused) {
+            if (lastMove != 'down' && !isPaused) {
                 velX = 0;
                 velY = -cellW;
                 lastMove = move;
@@ -156,7 +157,7 @@ function moveSnake() {
             break;
 
         case 'right':
-            if (lastMove != 'left' && !paused) {
+            if (lastMove != 'left' && !isPaused) {
                 velX = cellW;
                 velY = 0;
                 lastMove = move;
@@ -165,7 +166,7 @@ function moveSnake() {
             break;
 
         case 'down':
-            if (lastMove != 'up' && !paused) {
+            if (lastMove != 'up' && !isPaused) {
                 velX = 0;
                 velY = cellW;
                 lastMove = move;
