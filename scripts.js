@@ -73,6 +73,24 @@ let run = setInterval(() => {
         // fill background
         ctx.drawImage(background, 0, 0);
 
+        // draw grid lines
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 1;
+        ctx.globalAlpha = 0.5;
+        for (let i = 0; i < w; i += cellW) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, h);
+            ctx.stroke();
+        }
+        for (let i = 0; i < h; i += cellW) {
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(w, i);
+            ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+
         // 'real' coordinates used to draw snake
         realX = mod(x, w);
         realY = mod(y, h);
