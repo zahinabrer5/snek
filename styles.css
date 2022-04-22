@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
 body {
     background: linear-gradient(45deg, rgba(0,255,162,0.7343312324929971) 0%, rgba(0,128,255,0.5102415966386555) 100%);
     background-attachment: fixed;
-    font-family: monospace;
+    font-family: 'Roboto Mono', monospace;
 }
 
 canvas {

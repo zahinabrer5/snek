@@ -1,7 +1,5 @@
 const screen = document.getElementById('screen');
 const ctx = screen.getContext('2d', { alpha: false });
-const pausedCtx = document.getElementById('paused').getContext('2d');
-const gameOverCtx = document.getElementById('game-over').getContext('2d');
 const w = screen.width;
 const h = screen.height;
 const cellW = 25;
@@ -13,22 +11,13 @@ addEventListener('keydown', e => {
     switch (e.key) {
         case 'p':
             if (!isPaused) {
-                pausedCtx.fillStyle = '#000000';
-                pausedCtx.font = 'bold 48px monospace';
-                pausedCtx.textAlign = 'center';
-                pausedCtx.textBaseLine = 'middle';
-                pausedCtx.fillText('Paused', w/2, h/2);
-                pausedCtx.font = 'bold 24px monospace';
-                pausedCtx.fillText('Press R to resume', w/2, h/2+48);
+                ctx.drawImage(paused, 0, 0);
                 isPaused = true;
             }
             break;
 
         case 'r':
-            if (isPaused) {
-                pausedCtx.clearRect(0, 0, w, h);
-                isPaused = false;
-            }
+            if (isPaused) isPaused = false;
             break;
 
         default:
@@ -70,26 +59,7 @@ let oldHigh = hscore.innerHTML;
 // main game interval
 let run = setInterval(() => {
     if (!isPaused) {
-        // fill background
         ctx.drawImage(background, 0, 0);
-
-        // draw grid lines
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 1;
-        ctx.globalAlpha = 0.5;
-        for (let i = 0; i < w; i += cellW) {
-            ctx.beginPath();
-            ctx.moveTo(i, 0);
-            ctx.lineTo(i, h);
-            ctx.stroke();
-        }
-        for (let i = 0; i < h; i += cellW) {
-            ctx.beginPath();
-            ctx.moveTo(0, i);
-            ctx.lineTo(w, i);
-            ctx.stroke();
-        }
-        ctx.globalAlpha = 1;
 
         // 'real' coordinates used to draw snake
         realX = mod(x, w);
@@ -97,18 +67,18 @@ let run = setInterval(() => {
 
         // check if snake's head has bumped into body (game over)
         if (inSnake(realX, realY)) {
-            gameOverCtx.fillStyle = '#000000';
-            gameOverCtx.font = 'bold 48px monospace';
-            gameOverCtx.textAlign = 'center';
-            gameOverCtx.textBaseline = 'middle';
-            gameOverCtx.fillText('GAME OVER', w/2, h/2-72);
-            gameOverCtx.font = 'bold 24px monospace';
-            gameOverCtx.fillText(`Final Score: ${snake.length}`, w/2, h/2+48);
-            gameOverCtx.fillText('Press Q to restart', w/2, h/2+72);
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 48px Roboto Mono';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('GAME OVER', w/2, h/2-72);
+            ctx.font = 'bold 24px Roboto Mono';
+            ctx.fillText(`Final Score: ${snake.length}`, w/2, h/2+48);
+            ctx.fillText('Press Q to restart', w/2, h/2+72);
 
             if (Number(hscore.innerHTML) > Number(oldHigh)) {
-                gameOverCtx.fillStyle = '#FFFF00';
-                gameOverCtx.fillText('NEW HIGH SCORE!!!', w/2, h/2+120);
+                ctx.fillStyle = '#FFFF00';
+                ctx.fillText('NEW HIGH SCORE!!!', w/2, h/2+120);
             }
 
             clearInterval(run);
