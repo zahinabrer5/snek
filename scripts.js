@@ -1,5 +1,6 @@
 const screen = document.getElementById('screen');
 const ctx = screen.getContext('2d', { alpha: false });
+const gameOverCtx = document.getElementById('gameover').getContext('2d');
 const w = screen.width;
 const h = screen.height;
 const cellW = 25;
@@ -67,18 +68,18 @@ let run = setInterval(() => {
 
         // check if snake's head has bumped into body (game over)
         if (inSnake(realX, realY)) {
-            ctx.fillStyle = '#000000';
-            ctx.font = 'bold 48px Roboto Mono';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('GAME OVER', w/2, h/2-72);
-            ctx.font = 'bold 24px Roboto Mono';
-            ctx.fillText(`Final Score: ${snake.length}`, w/2, h/2+48);
-            ctx.fillText('Press Q to restart', w/2, h/2+72);
+            gameOverCtx.fillStyle = '#000000';
+            gameOverCtx.font = 'bold 48px Roboto Mono';
+            gameOverCtx.textAlign = 'center';
+            gameOverCtx.textBaseline = 'middle';
+            gameOverCtx.fillText('GAME OVER', w/2, h/2-72);
+            gameOverCtx.font = 'bold 24px Roboto Mono';
+            gameOverCtx.fillText(`Final Score: ${snake.length}`, w/2, h/2+48);
+            gameOverCtx.fillText('Press Q to restart', w/2, h/2+72);
 
             if (Number(hscore.innerHTML) > Number(oldHigh)) {
-                ctx.fillStyle = '#FFFF00';
-                ctx.fillText('NEW HIGH SCORE!!!', w/2, h/2+120);
+                gameOverCtx.fillStyle = '#FFFF00';
+                gameOverCtx.fillText('NEW HIGH SCORE!!!', w/2, h/2+120);
             }
 
             clearInterval(run);
