@@ -22,7 +22,7 @@ addEventListener('keydown', e => {
             break;
 
         default:
-            if (e.key.startsWith('Arrow')) {
+            if (e.key.startsWith('Arrow') && !isPaused) {
                 let move = e.key.substring(5).toLowerCase();
                 // add to buffer if not already in buffer
                 if (moveQueue[moveQueue.length-1] != move)
@@ -74,7 +74,7 @@ let run = setInterval(() => {
             }
             gifler('resources/img/bomb.gif').frames('canvas#bombgif', onDrawFrame);
 
-            deathSound.play();
+            new Audio('resources/sounds/vine-boom.mp3').play();
 
             gameOverCtx.fillStyle = '#000000';
             gameOverCtx.font = 'bold 48px Roboto Mono';
@@ -121,6 +121,8 @@ let run = setInterval(() => {
 
         // check if snake has eaten food
         if (realX == foodX && realY == foodY) {
+            new Audio('resources/sounds/nom.mp3').play();
+
             respawnFood();
             snake.push([realX, realY]);
             score.innerHTML = snake.length;
@@ -145,36 +147,44 @@ function moveSnake() {
         case 'left':
             // make it so you can't go 'backwards'
             // or change controls while game paused
-            if (lastMove != 'right' && !isPaused) {
+            if (lastMove != 'right') {
                 velX = -cellW;
                 velY = 0;
+                if (lastMove != 'left')
+                    new Audio('resources/sounds/windows-xp-error.mp3').play();
                 lastMove = move;
                 head = lhead;
             }
             break;
 
         case 'up':
-            if (lastMove != 'down' && !isPaused) {
+            if (lastMove != 'down') {
                 velX = 0;
                 velY = -cellW;
+                if (lastMove != 'up')
+                    new Audio('resources/sounds/windows-xp-error.mp3').play();
                 lastMove = move;
                 head = uhead;
             }
             break;
 
         case 'right':
-            if (lastMove != 'left' && !isPaused) {
+            if (lastMove != 'left') {
                 velX = cellW;
                 velY = 0;
+                if (lastMove != 'right')
+                    new Audio('resources/sounds/windows-xp-error.mp3').play();
                 lastMove = move;
                 head = rhead;
             }
             break;
 
         case 'down':
-            if (lastMove != 'up' && !isPaused) {
+            if (lastMove != 'up') {
                 velX = 0;
                 velY = cellW;
+                if (lastMove != 'down')
+                    new Audio('resources/sounds/windows-xp-error.mp3').play();
                 lastMove = move;
                 head = dhead;
             }
