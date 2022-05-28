@@ -8,6 +8,7 @@ body {
 
 canvas {
     position: absolute;
+    border: 5px solid black;
 }
 
 #canvas-wrapper {
@@ -15,10 +16,6 @@ canvas {
     width: 1000px;
     height: 600px;
     margin-bottom: 20px;
-}
-
-#screen {
-    border: 5px solid black;
 }
 
 img:not(#logo) {

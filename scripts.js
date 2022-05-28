@@ -39,7 +39,7 @@ addEventListener('keyup', e => {
         window.location.reload();
 }, false);
 
-// use modulus instead of remainder
+// use mathematical mod instead of remainder
 const mod = (a, b) => ((a % b) + b) % b;
 
 let x = 0;
@@ -68,6 +68,11 @@ let run = setInterval(() => {
 
         // check if snake's head has bumped into body (game over)
         if (inSnake(realX, realY)) {
+            function onDrawFrame(ctx, frame) {
+                ctx.drawImage(frame.buffer, realX-cellW, realY-cellW, cellW*3, cellW*3);
+            }
+            gifler('img/bomb.gif').frames('canvas#bombgif', onDrawFrame);
+
             gameOverCtx.fillStyle = '#000000';
             gameOverCtx.font = 'bold 48px Roboto Mono';
             gameOverCtx.textAlign = 'center';

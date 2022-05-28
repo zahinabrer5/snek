@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snek</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Use snake head as favicon -->
     <link rel="icon" href="img/snake/head/u.png">
+
+    <!-- Gifler (canvas gif loader) -->
+    <script src="https://unpkg.com/gifler@0.1.0/gifler.min.js"></script>
 </head>
 <body>
     <img src="img/mouse.png" id="food">
@@ -34,7 +38,8 @@
         High Score: <span id="hscore">1</span>
     </div>
     <div id="canvas-wrapper">
-        <canvas id="gameover" width="1000" height="600" style="z-index: 1;"></canvas>
+        <canvas id="gameover" width="1000" height="600" style="z-index: 2;"></canvas>
+        <canvas id="bombgif" width="1000" height="600" style="z-index: 1;"></canvas>
         <canvas id="screen" width="1000" height="600" style="z-index: 0;"></canvas>
     </div>
     <script src="scripts.js"></script>
