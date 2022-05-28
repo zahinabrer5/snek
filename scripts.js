@@ -68,10 +68,13 @@ let run = setInterval(() => {
 
         // check if snake's head has bumped into body (game over)
         if (inSnake(realX, realY)) {
+            // play bomb gif
             function onDrawFrame(ctx, frame) {
                 ctx.drawImage(frame.buffer, realX-cellW, realY-cellW, cellW*3, cellW*3);
             }
-            gifler('img/bomb.gif').frames('canvas#bombgif', onDrawFrame);
+            gifler('resources/img/bomb.gif').frames('canvas#bombgif', onDrawFrame);
+
+            deathSound.play();
 
             gameOverCtx.fillStyle = '#000000';
             gameOverCtx.font = 'bold 48px Roboto Mono';
