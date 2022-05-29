@@ -61,7 +61,7 @@ let head = rhead;
 hscore.innerHTML = localStorage.getItem('snekHighScore');
 let oldHigh = hscore.innerHTML;
 
-bgMusic.volume = 0.2;
+bgMusic.volume = 0.1;
 bgMusic.play();
 
 // main game interval
@@ -81,9 +81,11 @@ let run = setInterval(() => {
             function onDrawFrame(ctx, frame) {
                 ctx.drawImage(frame.buffer, realX-cellW, realY-cellW, cellW*3, cellW*3);
             }
-            gifler('resources/img/bomb.gif').frames('canvas#bombgif', onDrawFrame);
+            gifler('resources/img/death.gif').frames('canvas#bombgif', onDrawFrame);
 
-            new Audio('resources/sounds/vine-boom.mp3').play();
+            let death = new Audio('resources/sounds/death.mp3');
+            death.volume = 0.5;
+            death.play();
 
             gameOverCtx.fillStyle = '#000000';
             gameOverCtx.font = 'bold 48px Roboto Mono';
@@ -130,7 +132,7 @@ let run = setInterval(() => {
 
         // check if snake has eaten food
         if (realX == foodX && realY == foodY) {
-            new Audio('resources/sounds/nom.mp3').play();
+            new Audio('resources/sounds/bruh.mp3').play();
 
             respawnFood();
             snake.push([realX, realY]);
@@ -205,12 +207,10 @@ function moveSnake() {
 }
 
 function respawnFood() {
-    foodX = Math.floor(w/cellW * Math.random()) * cellW;
-    foodY = Math.floor(h/cellW * Math.random()) * cellW;
-    while (inSnake(foodX, foodY)) {
+    do {
         foodX = Math.floor(w/cellW * Math.random()) * cellW;
         foodY = Math.floor(h/cellW * Math.random()) * cellW;
-    }
+    } while (inSnake(foodX, foodY));
 }
 
 function inSnake(searchX, searchY) {
@@ -227,7 +227,7 @@ function getTail(headImg) {
 
 function playMoveSound() {
     // create new Audio object each time so sounds can overlap
-    let sound = new Audio('resources/sounds/windows-xp-error.mp3');
-    sound.volume = 0.2;
+    let sound = new Audio('resources/sounds/vine-boom.mp3');
+    sound.volume = 0.1;
     sound.play();
 }
