@@ -14,11 +14,15 @@ addEventListener('keydown', e => {
             if (!isPaused) {
                 ctx.drawImage(paused, 0, 0);
                 isPaused = true;
+                bgMusic.pause();
             }
             break;
 
         case 'r':
-            if (isPaused) isPaused = false;
+            if (isPaused) {
+                isPaused = false;
+                bgMusic.play();
+            }
             break;
 
         default:
@@ -57,6 +61,9 @@ let head = rhead;
 hscore.innerHTML = localStorage.getItem('snekHighScore');
 let oldHigh = hscore.innerHTML;
 
+bgMusic.volume = 0.2;
+bgMusic.play();
+
 // main game interval
 let run = setInterval(() => {
     if (!isPaused) {
@@ -68,6 +75,8 @@ let run = setInterval(() => {
 
         // check if snake's head has bumped into body (game over)
         if (inSnake(realX, realY)) {
+            bgMusic.pause();
+
             // play bomb gif
             function onDrawFrame(ctx, frame) {
                 ctx.drawImage(frame.buffer, realX-cellW, realY-cellW, cellW*3, cellW*3);
@@ -146,12 +155,11 @@ function moveSnake() {
     switch (move) {
         case 'left':
             // make it so you can't go 'backwards'
-            // or change controls while game paused
             if (lastMove != 'right') {
                 velX = -cellW;
                 velY = 0;
                 if (lastMove != 'left')
-                    new Audio('resources/sounds/windows-xp-error.mp3').play();
+                    playMoveSound();
                 lastMove = move;
                 head = lhead;
             }
@@ -162,7 +170,7 @@ function moveSnake() {
                 velX = 0;
                 velY = -cellW;
                 if (lastMove != 'up')
-                    new Audio('resources/sounds/windows-xp-error.mp3').play();
+                    playMoveSound();
                 lastMove = move;
                 head = uhead;
             }
@@ -173,7 +181,7 @@ function moveSnake() {
                 velX = cellW;
                 velY = 0;
                 if (lastMove != 'right')
-                    new Audio('resources/sounds/windows-xp-error.mp3').play();
+                    playMoveSound();
                 lastMove = move;
                 head = rhead;
             }
@@ -184,7 +192,7 @@ function moveSnake() {
                 velX = 0;
                 velY = cellW;
                 if (lastMove != 'down')
-                    new Audio('resources/sounds/windows-xp-error.mp3').play();
+                    playMoveSound();
                 lastMove = move;
                 head = dhead;
             }
@@ -215,4 +223,11 @@ function inSnake(searchX, searchY) {
 function getTail(headImg) {
     let dir = headImg.src.split('/').at(-1).split('.')[0];
     return document.getElementById(dir+'tail');
+}
+
+function playMoveSound() {
+    // create new Audio object each time so sounds can overlap
+    let sound = new Audio('resources/sounds/windows-xp-error.mp3');
+    sound.volume = 0.2;
+    sound.play();
 }
