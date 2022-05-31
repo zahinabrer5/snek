@@ -12,6 +12,7 @@
     <script src="https://unpkg.com/gifler@0.1.0/gifler.min.js"></script>
 </head>
 <body>
+    <img src="resources/img/wall.png" id="brickCell">
     <img src="resources/img/mouse.png" id="food">
     <img src="resources/img/screens/background.png" id="background">
     <img src="resources/img/screens/paused.png" id="paused">
@@ -28,18 +29,23 @@
     <ul id="keycmds">
         <li>Use arrow keys to move the snake</li>
         <li>Eat the mice</li>
+        <li>Stay inside the walls</li>
+        <li>Don't bump into yourself</li>
         <li>Press P to pause</li>
         <li>Press R to resume</li>
         <li>Press Q to restart</li>
     </ul>
+    <label for="walls">Play with Walls:</label>
+    <input type="checkbox" id="walls" name="walls" value="walls" onclick="window.location.reload()">
     <div id="score-disp">
         Score: <span id="score">1</span>
         &nbsp;&nbsp;&nbsp;&nbsp;
         High Score: <span id="hscore">1</span>
     </div>
     <div id="canvas-wrapper">
-        <canvas id="gameover" width="1000" height="600" style="z-index: 2;"></canvas>
-        <canvas id="bombgif" width="1000" height="600" style="z-index: 1;"></canvas>
+        <canvas id="gameover" width="1000" height="600" style="z-index: 3;"></canvas>
+        <canvas id="bomb-gif" width="1000" height="600" style="z-index: 2;"></canvas>
+        <canvas id="wall-layer" width="1000" height="600" style="z-index: 1;"></canvas>
         <canvas id="screen" width="1000" height="600" style="z-index: 0;"></canvas>
     </div>
     <script src="scripts.js"></script>

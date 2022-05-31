@@ -1,9 +1,23 @@
 const screen = document.getElementById('screen');
 const ctx = screen.getContext('2d', { alpha: false });
 const gameOverCtx = document.getElementById('gameover').getContext('2d');
+const wallLayer = document.getElementById('wall-layer').getContext('2d');
 const w = screen.width;
 const h = screen.height;
 const cellW = 25;
+
+const useWalls = walls.checked;
+if (useWalls) {
+    // wallLayer.fillStyle = '#a35b1c';
+    for (let i = 0; i < w/cellW; i++) {
+        wallLayer.drawImage(brickCell, i*cellW, 0);
+        wallLayer.drawImage(brickCell, i*cellW, h-cellW);
+    }
+    for (let i = 0; i < h/cellW; i++) {
+        wallLayer.drawImage(brickCell, 0, i*cellW);
+        wallLayer.drawImage(brickCell, w-cellW, i*cellW);
+    }
+}
 
 let moveQueue = []; // keyboard buffer
 let isPaused = false;
@@ -11,7 +25,7 @@ addEventListener('keydown', e => {
     e.preventDefault();
     switch (e.key) {
         case 'p':
-            if (!isPaused) {
+            if (!isPaused && playing) {
                 ctx.drawImage(paused, 0, 0);
                 isPaused = true;
                 bgMusic.pause();
@@ -46,8 +60,8 @@ addEventListener('keyup', e => {
 // use mathematical mod instead of remainder
 const mod = (a, b) => ((a % b) + b) % b;
 
-let x = 0;
-let y = 0;
+let x = cellW;
+let y = cellW;
 let velX = cellW;
 let velY = 0;
 let foodX;
@@ -58,6 +72,7 @@ let snake = [];
 let lastMove = 'right';
 respawnFood();
 let head = rhead;
+let playing = true;
 hscore.innerHTML = localStorage.getItem('snekHighScore');
 let oldHigh = hscore.innerHTML;
 
@@ -70,18 +85,20 @@ let run = setInterval(() => {
         ctx.drawImage(background, 0, 0);
 
         // 'real' coordinates used to draw snake
-        realX = mod(x, w);
-        realY = mod(y, h);
+        realX = useWalls ? x : mod(x, w);
+        realY = useWalls ? y : mod(y, h);
 
         // check if snake's head has bumped into body (game over)
-        if (inSnake(realX, realY)) {
+        if (inSnake(realX, realY) || (useWalls && inWall(realX, realY))) {
+            playing = false;
+
             bgMusic.pause();
 
             // play bomb gif
             function onDrawFrame(ctx, frame) {
                 ctx.drawImage(frame.buffer, realX-cellW, realY-cellW, cellW*3, cellW*3);
             }
-            gifler('resources/img/death.gif').frames('canvas#bombgif', onDrawFrame);
+            gifler('resources/img/death.gif').frames('canvas#bomb-gif', onDrawFrame);
 
             let death = new Audio('resources/sounds/death.mp3');
             death.volume = 0.5;
@@ -91,7 +108,7 @@ let run = setInterval(() => {
             gameOverCtx.font = 'bold 48px Roboto Mono';
             gameOverCtx.textAlign = 'center';
             gameOverCtx.textBaseline = 'middle';
-            gameOverCtx.fillText('GAME OVER', w/2, h/2-72);
+            gameOverCtx.fillText('YOU DIED', w/2, h/2-72);
             gameOverCtx.font = 'bold 24px Roboto Mono';
             gameOverCtx.fillText(`Final Score: ${snake.length}`, w/2, h/2+48);
             gameOverCtx.fillText('Press Q to restart', w/2, h/2+72);
@@ -146,8 +163,9 @@ let run = setInterval(() => {
 
         x += velX;
         y += velY;
+
+        moveSnake();
     }
-    moveSnake();
 }, 75);
 
 function moveSnake() {
@@ -210,13 +228,19 @@ function respawnFood() {
     do {
         foodX = Math.floor(w/cellW * Math.random()) * cellW;
         foodY = Math.floor(h/cellW * Math.random()) * cellW;
-    } while (inSnake(foodX, foodY));
+    } while (inSnake(foodX, foodY) || (useWalls && inWall(foodX, foodY)));
 }
 
 function inSnake(searchX, searchY) {
     for (let cell of snake)
         if (cell[0] == searchX && cell[1] == searchY)
             return true;
+    return false;
+}
+
+function inWall(searchX, searchY) {
+    if (searchX == 0 || searchX == w-cellW || searchY == 0 || searchY == h-cellW)
+        return true;
     return false;
 }
 
