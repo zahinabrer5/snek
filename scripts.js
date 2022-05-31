@@ -6,16 +6,16 @@ const w = screen.width;
 const h = screen.height;
 const cellW = 25;
 
-const useWalls = walls.checked;
+const useWalls = localStorage.getItem('toggleWalls') == '1';
 if (useWalls) {
     // wallLayer.fillStyle = '#a35b1c';
     for (let i = 0; i < w/cellW; i++) {
-        wallLayer.drawImage(brickCell, i*cellW, 0);
-        wallLayer.drawImage(brickCell, i*cellW, h-cellW);
+        wallLayer.drawImage(wallCell, i*cellW, 0);
+        wallLayer.drawImage(wallCell, i*cellW, h-cellW);
     }
     for (let i = 0; i < h/cellW; i++) {
-        wallLayer.drawImage(brickCell, 0, i*cellW);
-        wallLayer.drawImage(brickCell, w-cellW, i*cellW);
+        wallLayer.drawImage(wallCell, 0, i*cellW);
+        wallLayer.drawImage(wallCell, w-cellW, i*cellW);
     }
 }
 
@@ -254,4 +254,10 @@ function playMoveSound() {
     let sound = new Audio('resources/sounds/vine-boom.mp3');
     sound.volume = 0.1;
     sound.play();
+}
+
+function toggleWalls() {
+    let toggle = localStorage.getItem('toggleWalls') != '1' ? '1' : '';
+    localStorage.setItem('toggleWalls', toggle);
+    window.location.reload();
 }
