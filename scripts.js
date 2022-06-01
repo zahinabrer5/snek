@@ -8,7 +8,6 @@ const cellW = 25;
 
 const useWalls = localStorage.getItem('toggleWalls') == '1';
 if (useWalls) {
-    // wallLayer.fillStyle = '#a35b1c';
     for (let i = 0; i < w/cellW; i++) {
         wallLayer.drawImage(wallCell, i*cellW, 0);
         wallLayer.drawImage(wallCell, i*cellW, h-cellW);
@@ -64,13 +63,12 @@ let x = cellW;
 let y = cellW;
 let velX = cellW;
 let velY = 0;
-let foodX;
-let foodY;
+let foodX = cellW;
+let foodY = cellW;
 let realX;
 let realY;
 let snake = [];
 let lastMove = 'right';
-respawnFood();
 let head = rhead;
 let playing = true;
 hscore.innerHTML = localStorage.getItem('snekHighScore');
@@ -78,6 +76,8 @@ let oldHigh = hscore.innerHTML;
 
 bgMusic.volume = 0.1;
 bgMusic.play();
+
+let firstPlay = true;
 
 // main game interval
 let run = setInterval(() => {
@@ -122,7 +122,8 @@ let run = setInterval(() => {
         }
 
         // draw food
-        ctx.drawImage(food, foodX, foodY);
+        if (!firstPlay)
+            ctx.drawImage(food, foodX, foodY);
 
         let oldSnake = [...snake];
 
@@ -149,11 +150,12 @@ let run = setInterval(() => {
 
         // check if snake has eaten food
         if (realX == foodX && realY == foodY) {
-            new Audio('resources/sounds/bruh.mp3').play();
+            if (!firstPlay)
+                new Audio('resources/sounds/bruh.mp3').play();
 
             respawnFood();
             snake.push([realX, realY]);
-            score.innerHTML = snake.length;
+            score.innerHTML = snake.length-2;
 
             if (Number(score.innerHTML) > Number(hscore.innerHTML)) {
                 hscore.innerHTML = score.innerHTML;
@@ -165,6 +167,8 @@ let run = setInterval(() => {
         y += velY;
 
         moveSnake();
+
+        firstPlay = false;
     }
 }, 75);
 
@@ -257,7 +261,7 @@ function playMoveSound() {
 }
 
 function toggleWalls() {
-    let toggle = localStorage.getItem('toggleWalls') != '1' ? '1' : '';
+    let toggle = localStorage.getItem('toggleWalls') !== '1' ? '1' : '';
     localStorage.setItem('toggleWalls', toggle);
     window.location.reload();
 }
