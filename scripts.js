@@ -8,6 +8,7 @@ const cellW = 25;
 
 const useWalls = localStorage.getItem('toggleWalls') == '1';
 if (useWalls) {
+    // draw walls
     for (let i = 0; i < w/cellW; i++) {
         wallLayer.drawImage(wallCell, i*cellW, 0);
         wallLayer.drawImage(wallCell, i*cellW, h-cellW);
@@ -65,6 +66,7 @@ let velX = cellW;
 let velY = 0;
 let foodX = cellW;
 let foodY = cellW;
+let toxicFoods = [];
 let realX;
 let realY;
 let snake = [];
@@ -78,6 +80,8 @@ bgMusic.volume = 0.1;
 bgMusic.play();
 
 let firstPlay = true;
+let playCounter = 0;
+let suicide = false;
 
 // main game interval
 let run = setInterval(() => {
@@ -89,7 +93,7 @@ let run = setInterval(() => {
         realY = useWalls ? y : mod(y, h);
 
         // check if snake's head has bumped into body (game over)
-        if (inSnake(realX, realY) || (useWalls && inWall(realX, realY))) {
+        if (inSnake(realX, realY) || (useWalls && inWall(realX, realY)) || suicide) {
             playing = false;
 
             bgMusic.pause();
@@ -155,12 +159,28 @@ let run = setInterval(() => {
 
             respawnFood();
             snake.push([realX, realY]);
-            score.innerHTML = snake.length-2;
+        }
 
-            if (Number(score.innerHTML) > Number(hscore.innerHTML)) {
-                hscore.innerHTML = score.innerHTML;
-                localStorage.setItem('snekHighScore', snake.length);
+        // spawn toxic foods
+        for (current of toxicFoods)
+            ctx.drawImage(toxicFood, current[0], current[1], cellW, cellW);
+        if (playCounter % 20 == 0 && Math.random() > 0.5)
+            spawnToxicFood();
+        if (playCounter % 45 == 0)
+            toxicFoods.pop();
+        // check if snake has eaten toxic food
+        for (let i = 0; i < toxicFoods.length; i++) {
+            if (realX == toxicFoods[i][0] && realY == toxicFoods[i][1]) {
+                toxicFoods.splice(i, 1);
+                if (snake.length == 2) suicide = true;
+                else snake.pop();
             }
+        }
+
+        score.innerHTML = snake.length-2;
+        if (Number(score.innerHTML) > Number(hscore.innerHTML)) {
+            hscore.innerHTML = score.innerHTML;
+            localStorage.setItem('snekHighScore', snake.length);
         }
 
         x += velX;
@@ -169,6 +189,7 @@ let run = setInterval(() => {
         moveSnake();
 
         firstPlay = false;
+        playCounter++;
     }
 }, 75);
 
@@ -233,6 +254,21 @@ function respawnFood() {
         foodX = Math.floor(w/cellW * Math.random()) * cellW;
         foodY = Math.floor(h/cellW * Math.random()) * cellW;
     } while (inSnake(foodX, foodY) || (useWalls && inWall(foodX, foodY)));
+}
+
+function spawnToxicFood() {
+    let x;
+    let y;
+    do {
+        x = Math.floor(w/cellW * Math.random()) * cellW;
+        y = Math.floor(h/cellW * Math.random()) * cellW;
+    } while (
+        toxicFoods.includes([x, y]) ||
+        inSnake(x, y) ||
+        (useWalls && inWall(x, y)) ||
+        (x == foodX && y == foodY)
+    );
+    toxicFoods.push([x, y]);
 }
 
 function inSnake(searchX, searchY) {
