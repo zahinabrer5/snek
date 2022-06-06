@@ -133,7 +133,7 @@ let run = setInterval(() => {
             gameOverCtx.textBaseline = 'middle';
             gameOverCtx.fillText('YOU DIED', w/2, h/2-72);
             gameOverCtx.font = 'bold 24px Roboto Mono';
-            gameOverCtx.fillText(`Final Score: ${snake.length}`, w/2, h/2+48);
+            gameOverCtx.fillText(`Final Score: ${score.innerHTML}`, w/2, h/2+48);
             gameOverCtx.fillText('Press Q to restart', w/2, h/2+72);
 
             if (Number(hscore.innerHTML) > Number(oldHigh)) {
@@ -182,7 +182,7 @@ let run = setInterval(() => {
 
         // spawn toxic foods
         for (current of toxicFoods)
-            ctx.drawImage(toxicFood, current[0], current[1], cellW, cellW);
+            ctx.drawImage(toxicFood, current[0], current[1]);
         if (playCounter % 20 == 0 && Math.random() > 0.5)
             spawnToxicFood();
         if (playCounter % 45 == 0)
