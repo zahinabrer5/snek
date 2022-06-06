@@ -131,7 +131,7 @@ let run = setInterval(() => {
             gameOverCtx.font = 'bold 48px Roboto Mono';
             gameOverCtx.textAlign = 'center';
             gameOverCtx.textBaseline = 'middle';
-            gameOverCtx.fillText('YOU DIED', w/2, h/2-72);
+            gameOverCtx.fillText(suicide ? 'YOU KILLED YOURSELF' : 'YOU DIED', w/2, h/2-72);
             gameOverCtx.font = 'bold 24px Roboto Mono';
             gameOverCtx.fillText(`Final Score: ${score.innerHTML}`, w/2, h/2+48);
             gameOverCtx.fillText('Press Q to restart', w/2, h/2+72);
