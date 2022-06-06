@@ -93,7 +93,7 @@ let run = setInterval(() => {
         realY = useWalls ? y : mod(y, h);
 
         // check if snake's head has bumped into body (game over)
-        if (inSnake(realX, realY) || (useWalls && inWall(realX, realY)) || suicide) {
+        if (pairInArray(snake, realX, realY) || (useWalls && inWall(realX, realY)) || suicide) {
             playing = false;
 
             bgMusic.pause();
@@ -249,11 +249,22 @@ function moveSnake() {
     moveQueue.shift();
 }
 
+function pairInArray(arr, x, y) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i][0] == x && arr[i][1] == y)
+            return true;
+    }
+    return false;
+}
+
 function respawnFood() {
     do {
         foodX = Math.floor(w/cellW * Math.random()) * cellW;
         foodY = Math.floor(h/cellW * Math.random()) * cellW;
-    } while (inSnake(foodX, foodY) || (useWalls && inWall(foodX, foodY)));
+    } while (
+        pairInArray(snake, foodX, foodY) ||
+        (useWalls && inWall(foodX, foodY))
+    );
 }
 
 function spawnToxicFood() {
@@ -263,19 +274,12 @@ function spawnToxicFood() {
         x = Math.floor(w/cellW * Math.random()) * cellW;
         y = Math.floor(h/cellW * Math.random()) * cellW;
     } while (
-        toxicFoods.includes([x, y]) ||
-        inSnake(x, y) ||
+        pairInArray(toxicFoods, x, y) ||
+        pairInArray(snake, x, y) ||
         (useWalls && inWall(x, y)) ||
         (x == foodX && y == foodY)
     );
     toxicFoods.push([x, y]);
-}
-
-function inSnake(searchX, searchY) {
-    for (let cell of snake)
-        if (cell[0] == searchX && cell[1] == searchY)
-            return true;
-    return false;
 }
 
 function inWall(searchX, searchY) {
