@@ -40,8 +40,27 @@ addEventListener('keydown', e => {
             break;
 
         default:
-            if (e.key.startsWith('Arrow') && !isPaused) {
-                let move = e.key.substring(5).toLowerCase();
+            if (!isPaused) {
+                let move;
+                if (e.key.startsWith('Arrow'))
+                    move = e.key.substring(5).toLowerCase();
+                else if ('WASD'.includes(e.key.toUpperCase()))
+                    switch (e.key.toUpperCase()) {
+                        case 'W':
+                            move = 'up';
+                            break;
+                        case 'A':
+                            move = 'left';
+                            break;
+                        case 'S':
+                            move = 'down';
+                            break;
+                        case 'D':
+                            move = 'right';
+                            break;
+                        default:
+                            break;
+                    }
                 // add to buffer if not already in buffer
                 if (moveQueue[moveQueue.length-1] != move)
                     moveQueue.push(move);
