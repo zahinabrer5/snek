@@ -5,8 +5,9 @@ const wallLayer = document.getElementById('wall-layer').getContext('2d');
 const w = screen.width;
 const h = screen.height;
 const cellW = 25;
+const masterVolume = (localStorage.getItem('volume') || '100')/100;
 
-const useWalls = localStorage.getItem('toggleWalls') == '1';
+const useWalls = localStorage.getItem('toggleWalls') === '1';
 if (useWalls) {
     // draw walls
     for (let i = 0; i < w/cellW; i++) {
@@ -95,7 +96,7 @@ let playing = true;
 hscore.innerHTML = localStorage.getItem('snekHighScore');
 let oldHigh = hscore.innerHTML;
 
-bgMusic.volume = 0.1;
+bgMusic.volume = 0.1*masterVolume;
 bgMusic.play();
 
 let firstPlay = true;
@@ -121,10 +122,10 @@ let run = setInterval(() => {
             function onDrawFrame(ctx, frame) {
                 ctx.drawImage(frame.buffer, realX-cellW, realY-cellW, cellW*3, cellW*3);
             }
-            gifler('resources/img/death.gif').frames('canvas#bomb-gif', onDrawFrame);
+            gifler('resources/img/bomb.gif').frames('canvas#bomb-gif', onDrawFrame);
 
-            let death = new Audio('resources/sounds/death.mp3');
-            death.volume = 0.5;
+            let death = new Audio('resources/sounds/vine-boom.mp3');
+            death.volume = 0.5*masterVolume;
             death.play();
 
             gameOverCtx.fillStyle = '#000000';
@@ -173,8 +174,11 @@ let run = setInterval(() => {
 
         // check if snake has eaten food
         if (realX == foodX && realY == foodY) {
-            if (!firstPlay)
-                new Audio('resources/sounds/bruh.mp3').play();
+            if (!firstPlay) {
+                let sound = new Audio('resources/sounds/nom.mp3');
+                sound.volume = masterVolume;
+                sound.play();
+            }
 
             respawnFood();
             snake.push([realX, realY]);
@@ -191,6 +195,11 @@ let run = setInterval(() => {
         for (let i = 0; i < toxicFoods.length; i++) {
             if (realX == toxicFoods[i][0] && realY == toxicFoods[i][1]) {
                 toxicFoods.splice(i, 1);
+                // play move sound
+                let sound = new Audio('resources/sounds/oof.m4a');
+                sound.volume = masterVolume;
+                sound.play();
+                // if the snake dies if it's 2 cells long (score is 0) and eats a toxic food
                 if (snake.length == 2) suicide = true;
                 else snake.pop();
             }
@@ -314,13 +323,13 @@ function getTail(headImg) {
 
 function playMoveSound() {
     // create new Audio object each time so sounds can overlap
-    let sound = new Audio('resources/sounds/vine-boom.mp3');
-    sound.volume = 0.1;
+    let sound = new Audio('resources/sounds/windows-xp-error.mp3');
+    sound.volume = Number(localStorage.getItem('moveVolume'))*masterVolume;
     sound.play();
 }
 
-function toggleWalls() {
-    let toggle = localStorage.getItem('toggleWalls') !== '1' ? '1' : '';
-    localStorage.setItem('toggleWalls', toggle);
+function toggle(item, value) {
+    let toggle = localStorage.getItem(item) !== value ? value : '';
+    localStorage.setItem(item, toggle);
     window.location.reload();
 }
