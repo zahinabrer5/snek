@@ -1,0 +1,21 @@
+- Change speed
+    - With Shift key
+- Change number of mice
+- Change game screen size
+- ~~Add walls to play area~~
+- Change snake colour
+- ~~Start snake off with 2 points (head and tail)~~
+- ~~WASD controls~~
+- ~~Poisonous food (disappears periodically)~~
+- Multiplayer
+    - Local (like fireboy and watergirl)
+    - Online
+- Add levels
+- Different foods
+- ~~Background music~~
+- ~~Sound effects~~
+- Prizes and achievements
+- ~~Mini bomb gif on death~~
+- ~~Volume management~~
+- Username
+- Add multiple lives
