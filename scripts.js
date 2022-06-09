@@ -195,11 +195,12 @@ let run = setInterval(() => {
         for (let i = 0; i < toxicFoods.length; i++) {
             if (realX == toxicFoods[i][0] && realY == toxicFoods[i][1]) {
                 toxicFoods.splice(i, 1);
-                // play move sound
+                // play sound effect for eating toxic food
                 let sound = new Audio('resources/sounds/oof.m4a');
                 sound.volume = masterVolume;
                 sound.play();
-                // if the snake dies if it's 2 cells long (score is 0) and eats a toxic food
+                // the snake dies if it's 2 cells long (score
+                // is 0) after it eats a toxic food
                 if (snake.length == 2) suicide = true;
                 else snake.pop();
             }
@@ -278,6 +279,13 @@ function moveSnake() {
 }
 
 function pairInArray(arr, x, y) {
+    // ensures snake doesn't die if it hits the
+    // cell the snake's tail used to be in
+    if (arr == snake &&
+        snake.length > 0 &&
+        snake[snake.length-1][0] == x &&
+        snake[snake.length-1][1] == y)
+        return false;
     for (let i = 0; i < arr.length; i++) {
         if (arr[i][0] == x && arr[i][1] == y)
             return true;
