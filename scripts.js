@@ -162,7 +162,7 @@ let run = setInterval(() => {
         if (snake.length > 1) {
             snake[snake.length-1] = oldSnake[snake.length-2];
             ctx.drawImage(
-                getTail(snake[snake.length-1][2]),
+                getTail(),
                 snake[snake.length-1][0],
                 snake[snake.length-1][1]
             );
@@ -206,10 +206,11 @@ let run = setInterval(() => {
             }
         }
 
+        // update score & high score if necessary
         score.innerHTML = snake.length-2;
         if (Number(score.innerHTML) > Number(hscore.innerHTML)) {
             hscore.innerHTML = score.innerHTML;
-            localStorage.setItem('snekHighScore', snake.length);
+            localStorage.setItem('snekHighScore', score.innerHTML);
         }
 
         x += velX;
@@ -294,12 +295,16 @@ function pairInArray(arr, x, y) {
 }
 
 function respawnFood() {
+    let prevFoodX = foodX;
+    let prevFoodY = foodY;
     do {
         foodX = Math.floor(w/cellW * Math.random()) * cellW;
         foodY = Math.floor(h/cellW * Math.random()) * cellW;
     } while (
+        pairInArray(toxicFoods, foodX, foodY) ||
         pairInArray(snake, foodX, foodY) ||
-        (useWalls && inWall(foodX, foodY))
+        (useWalls && inWall(foodX, foodY)) ||
+        (foodX == prevFoodX && foodY == prevFoodY)
     );
 }
 
@@ -324,8 +329,10 @@ function inWall(searchX, searchY) {
     return false;
 }
 
-function getTail(headImg) {
-    let dir = headImg.src.split('/').at(-1).split('.')[0];
+function getTail() {
+    // get corresponding image for tail
+    // acording to the previous cell for the tail
+    let dir = snake[snake.length-1][2].src.split('/').at(-1).split('.')[0];
     return document.getElementById(dir+'tail');
 }
 
