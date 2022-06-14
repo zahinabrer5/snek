@@ -26,7 +26,7 @@ addEventListener('keydown', e => {
     e.preventDefault();
     switch (e.key) {
         case 'p':
-            if (!isPaused && playing) {
+            if (!isPaused && !dead) {
                 ctx.drawImage(paused, 0, 0);
                 isPaused = true;
                 bgMusic.pause();
@@ -92,7 +92,7 @@ let realY;
 let snake = [];
 let lastMove = 'right';
 let head = rhead;
-let playing = true;
+let dead = false;
 hscore.innerHTML = localStorage.getItem('snekHighScore');
 let oldHigh = hscore.innerHTML;
 
@@ -112,8 +112,10 @@ let firstPlay = true;
 let playCounter = 0;
 let suicide = false;
 
+let level = 0;
+
 // main game interval
-let run = setInterval(() => {
+let mainLoop = function() {
     if (!isPaused) {
         ctx.drawImage(background, 0, 0);
 
@@ -123,7 +125,7 @@ let run = setInterval(() => {
 
         // check if snake's head has bumped into body (game over)
         if (pairInArray(snake, realX, realY) || (useWalls && inWall(realX, realY)) || suicide) {
-            playing = false;
+            dead = true;
 
             bgMusic.pause();
 
@@ -224,6 +226,24 @@ let run = setInterval(() => {
             localStorage.setItem('snekHighScore', score.innerHTML);
         }
 
+        // update level based on current score
+        if (!dead) {
+            let prevLevel = level;
+            level = Math.floor(score.innerHTML/20);
+            console.log(level); // for debugging
+
+            if (level != prevLevel) {
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 48px Roboto Mono';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(`LEVEL ${level}`, w/2, h/2);
+            }
+
+            clearInterval(run);
+            run = setInterval(mainLoop, 75-15*level);
+        }
+
         x += velX;
         y += velY;
 
@@ -232,12 +252,13 @@ let run = setInterval(() => {
         firstPlay = false;
         playCounter++;
     }
-}, 60);
+}
+let run = setInterval(mainLoop, 75-15*level);
 
 function moveSnake() {
     if (moveQueue.length == 0) return;
     let move = moveQueue[0];
-    console.log(moveQueue); // for debugging
+    // console.log(moveQueue); // for debugging
     switch (move) {
         case 'left':
             // make it so you can't go 'backwards'
