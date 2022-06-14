@@ -98,11 +98,15 @@ let oldHigh = hscore.innerHTML;
 
 bgMusic.volume = 0.1*masterVolume;
 
-ctx.fillStyle = '#ffffff';
-ctx.font = 'bold 48px Roboto Mono';
-ctx.textAlign = 'center';
-ctx.textBaseline = 'middle';
-ctx.fillText('PRESS R TO START PLAYING', w/2, h/2);
+// draw the 'start playing' screen before game starts
+// draws when fonts are completely loaded
+document.fonts.ready.then(() => {
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 48px Roboto Mono';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('PRESS R TO START PLAYING', w/2, h/2);
+});
 
 let firstPlay = true;
 let playCounter = 0;
@@ -133,6 +137,8 @@ let run = setInterval(() => {
             death.volume = 0.5*masterVolume;
             death.play();
 
+            // by now, fonts should have been completely loaded
+            // so there's no need to wait for them to load again
             gameOverCtx.fillStyle = '#000000';
             gameOverCtx.font = 'bold 48px Roboto Mono';
             gameOverCtx.textAlign = 'center';
@@ -348,6 +354,7 @@ function playMoveSound() {
     sound.play();
 }
 
+// used for the wall toggle and move sound toggles
 function toggle(item, value) {
     let toggle = localStorage.getItem(item) !== value ? value : '';
     localStorage.setItem(item, toggle);
