@@ -7,6 +7,8 @@ Play it online here: <a href="https://snek.zahinabrer1.repl.co" target="_blank">
 
 This game was originally created for a highschool ICS class.
 
+Tested on Brave Browser & Google Chrome, both running Chromium version 102 (unfortunately, it doesn't seem to work entirely on Firefox).
+
 
 ## Playing locally
 1. Clone or download this repository

@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snek</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Use snake head as favicon -->
+    <!-- use snake head as favicon -->
     <link rel="icon" href="resources/img/snake/head/u.png">
-    <!-- Gifler (canvas gif loader) -->
+    <!-- gifler (canvas gif loader) -->
     <script src="https://unpkg.com/gifler@0.1.0/gifler.min.js"></script>
 </head>
 <body>
-    <!-- Load images used in game (hidden in CSS) -->
+    <!-- load images used in game (hidden in CSS) -->
     <img src="resources/img/wall.png" id="wallCell">
     <img src="resources/img/mouse.png" id="food">
     <img src="resources/img/spider.png" id="toxicFood">
@@ -46,10 +46,10 @@
         <span id="volume-value"></span>%
     </div>
     <!--
-    Inspired by code from
+    innspired by code from
     https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_js_rangeslider
 
-    Update percentage label and set master volume as user moves the slider
+    update percentage label and set master volume as user moves the slider
     -->
     <script>
         let slider = document.getElementById("volume-slider");
@@ -72,6 +72,10 @@
         <canvas id="wall-layer" width="1000" height="600" style="z-index: 1;"></canvas>
         <canvas id="screen" width="1000" height="600" style="z-index: 0;"></canvas>
     </div>
-    <script src="scripts.js"></script>
+    <!--
+    use defer attribute to ensure the page has been
+    completely loaded before game code is executed
+    -->
+    <script src="scripts.js" defer></script>
 </body>
 </html>
