@@ -21,7 +21,7 @@ if (useWalls) {
 }
 
 let moveQueue = []; // keyboard buffer
-let isPaused = false;
+let isPaused = true;
 addEventListener('keydown', e => {
     e.preventDefault();
     switch (e.key) {
@@ -97,7 +97,12 @@ hscore.innerHTML = localStorage.getItem('snekHighScore');
 let oldHigh = hscore.innerHTML;
 
 bgMusic.volume = 0.1*masterVolume;
-bgMusic.play();
+
+ctx.fillStyle = '#ffffff';
+ctx.font = 'bold 48px Roboto Mono';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.fillText('PRESS R TO START PLAYING', w/2, h/2);
 
 let firstPlay = true;
 let playCounter = 0;
@@ -221,7 +226,7 @@ let run = setInterval(() => {
         firstPlay = false;
         playCounter++;
     }
-}, 75);
+}, 60);
 
 function moveSnake() {
     if (moveQueue.length == 0) return;
