@@ -110,6 +110,7 @@ document.fonts.ready.then(() => {
 
 let firstPlay = true;
 let playCounter = 0;
+let counterSnapshot = 0;
 let suicide = false;
 
 let level = 0;
@@ -153,6 +154,11 @@ let mainLoop = function() {
             if (Number(hscore.innerHTML) > Number(oldHigh)) {
                 gameOverCtx.fillStyle = '#FFFF00';
                 gameOverCtx.fillText('NEW HIGH SCORE!!!', w/2, h/2+120);
+                if (Number(score.innerHTML) != Number(hscore.innerHTML)) {
+                    gameOverCtx.fillStyle = '#000000';
+                    gameOverCtx.font = 'bold 18px Roboto Mono';
+                    gameOverCtx.fillText('(although it looks like you\'ve had spiders for your last meal :P)', w/2, h/2+156);
+                }
             }
 
             clearInterval(run);
@@ -232,12 +238,16 @@ let mainLoop = function() {
             level = Math.floor(score.innerHTML/20);
             console.log(level); // for debugging
 
-            if (level != prevLevel) {
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 48px Roboto Mono';
+            if (level != prevLevel)
+                counterSnapshot = playCounter;
+            if (playCounter <= counterSnapshot+30) {
+                ctx.fillStyle = '#000000';
+                ctx.font = 'bold 36px Roboto Mono';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(`LEVEL ${level}`, w/2, h/2);
+                ctx.fillText(`LEVEL ${level+1}`, w/2, 48);
+                ctx.font = 'bold 24px Roboto Mono';
+                ctx.fillText(`(${Math.round(1000/(75-15*level))} FPS)`, w/2, 96);
             }
 
             clearInterval(run);
