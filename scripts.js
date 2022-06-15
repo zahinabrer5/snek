@@ -245,9 +245,9 @@ let mainLoop = function() {
                 ctx.font = 'bold 36px Roboto Mono';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(`LEVEL ${level+1}`, w/2, 48);
+                ctx.fillText(`LEVEL ${level+1}`, w/2, 72);
                 ctx.font = 'bold 24px Roboto Mono';
-                ctx.fillText(`(${Math.round(1000/(75-15*level))} FPS)`, w/2, 96);
+                ctx.fillText(`(${Math.round(1000/(75-15*level))} FPS)`, w/2, 120);
             }
 
             clearInterval(run);

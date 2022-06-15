@@ -1,9 +1,16 @@
+/* Roboto Mono font */
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
 body {
     background: linear-gradient(45deg, rgba(0,255,162,0.7343312324929971) 0%, rgba(0,128,255,0.5102415966386555) 100%);
     background-attachment: fixed;
     font-family: 'Roboto Mono', monospace;
+}
+
+/* center everything */
+#container {
+    width: 1000px;
+    margin: 0 auto;
 }
 
 canvas {
@@ -23,6 +30,11 @@ img:not(#logo) {
     display: none;
 }
 
+#logo {
+    display: block;
+    margin: 0 auto;
+}
+
 #score-disp {
     font-size: 24px;
     font-weight: bold;
@@ -39,4 +51,21 @@ img:not(#logo) {
 
 #keycmds {
     font-size: 16px;
+}
+
+button {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 7px;
+    font-size: 1rem;
+    font-family: 'Roboto Mono', monospace;
+}
+
+button:hover {
+    color: white;
+    background-color: #0e660e;
+}
+
+button:active {
+    background-color: #660000;
 }

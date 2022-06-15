@@ -10,7 +10,7 @@
 - Multiplayer
     - Local (like fireboy and watergirl)
     - Online
-- Add levels
+- ~~Add levels~~
 - Different foods
 - ~~Background music~~
 - ~~Sound effects~~
@@ -19,3 +19,4 @@
 - ~~Volume management~~
 - Username
 - Add multiple lives
+- ~~Make UI look less crappy~~

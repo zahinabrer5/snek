@@ -26,53 +26,66 @@
     <img src="resources/img/snake/tail/d.png" id="dtail">
     <img src="resources/img/snake/tail/l.png" id="ltail">
     <img src="resources/img/snake/tail/r.png" id="rtail">
-    <img src="resources/img/logo.png" id="logo">
     <audio src="resources/sounds/background-music.wav" loop="loop" id="bgMusic"></audio>
-    <ul id="keycmds">
-        <li>Use arrow keys or WASD keys to move the snake</li>
-        <li>Eat the mice</li>
-        <li>Stay inside the walls</li>
-        <li>Don't bump into yourself</li>
-        <li>Aoid the spiders (or stategically use them? 🤔)</li>
-        <li>Press P to pause</li>
-        <li>Press R to resume</li>
-        <li>Press Q to restart</li>
-        <li>You begin a new level with a different speed whenever your score is a multiple of 20</li>
-    </ul>
-    <button onclick="toggle('toggleWalls', '1')">Toggle Walls</button>
-    <button onclick="toggle('moveVolume', '0.1')">Toggle Move Sound</button>
-    <div>
-        <p>Master Volume (refresh to apply)</p>
-        <input type="range" min="0" max="100" value="100" id="volume-slider">
-        <span id="volume-value"></span>%
-    </div>
-    <!--
-    innspired by code from
-    https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_js_rangeslider
 
-    update percentage label and set master volume as user moves the slider
-    -->
-    <script>
-        let slider = document.getElementById("volume-slider");
-        let output = document.getElementById("volume-value");
-        slider.value = localStorage.getItem("volume") || 100;
-        output.innerHTML = localStorage.getItem("volume") || 100;
-        slider.oninput = function() {
-            output.innerHTML = this.value;
-            localStorage.setItem("volume", this.value);
-        }
-    </script>
-    <div id="score-disp">
-        Score: <span id="score">1</span>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        High Score: <span id="hscore">1</span>
+    <div id="container">
+        <img src="resources/img/logo.png" id="logo">
+        <br>
+        <div>
+            <ul id="keycmds">
+                <li>Use arrow keys or WASD keys to move the snake</li>
+                <li>Eat the mice</li>
+                <li>Stay inside the walls</li>
+                <li>Don't bump into yourself</li>
+                <li>Aoid the spiders (or stategically use them? 🤔)</li>
+                <li>Press P to pause</li>
+                <li>Press R to resume</li>
+                <li>Press Q to restart</li>
+                <li>You begin a new level with a different speed whenever your score is a multiple of 20</li>
+                <li><strong>Scroll down to see entire playing area</strong></li>
+            </ul>
+        </div>
+        <br>
+        <div>
+            <button onclick="toggle('toggleWalls', '1')">Toggle Walls</button>
+            <button onclick="toggle('moveVolume', '0.1')">Toggle Move Sound</button>
+        </div>
+        <div>
+            <p>Master Volume (refresh to apply):</p>
+            <input type="range" min="0" max="100" value="100" id="volume-slider">
+            <span id="volume-value"></span>%
+
+            <!--
+            innspired by code from
+            https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_js_rangeslider
+
+            update percentage label and set master volume as user moves the slider
+            -->
+            <script>
+                let slider = document.getElementById("volume-slider");
+                let output = document.getElementById("volume-value");
+                slider.value = localStorage.getItem("volume") || 100;
+                output.innerHTML = localStorage.getItem("volume") || 100;
+                slider.oninput = function() {
+                    output.innerHTML = this.value;
+                    localStorage.setItem("volume", this.value);
+                }
+            </script>
+        </div>
+        <br>
+        <div id="score-disp">
+            Score: <span id="score">1</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            High Score: <span id="hscore">1</span>
+        </div>
+        <div id="canvas-wrapper">
+            <canvas id="gameover" width="1000" height="600" style="z-index: 3;"></canvas>
+            <canvas id="bomb-gif" width="1000" height="600" style="z-index: 2;"></canvas>
+            <canvas id="wall-layer" width="1000" height="600" style="z-index: 1;"></canvas>
+            <canvas id="screen" width="1000" height="600" style="z-index: 0;"></canvas>
+        </div>
     </div>
-    <div id="canvas-wrapper">
-        <canvas id="gameover" width="1000" height="600" style="z-index: 3;"></canvas>
-        <canvas id="bomb-gif" width="1000" height="600" style="z-index: 2;"></canvas>
-        <canvas id="wall-layer" width="1000" height="600" style="z-index: 1;"></canvas>
-        <canvas id="screen" width="1000" height="600" style="z-index: 0;"></canvas>
-    </div>
+
     <!--
     use defer attribute to ensure the page has been
     completely loaded before game code is executed
