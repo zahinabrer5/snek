@@ -43,8 +43,10 @@ addEventListener('keydown', e => {
         default:
             if (!isPaused) {
                 let move;
+                // check if an arrow key was pressed
                 if (e.key.startsWith('Arrow'))
                     move = e.key.substring(5).toLowerCase();
+                // otherwise check if a WASD key was pressed
                 else if ('WASD'.includes(e.key.toUpperCase()))
                     switch (e.key.toUpperCase()) {
                         case 'W':
@@ -151,9 +153,12 @@ let mainLoop = function() {
             gameOverCtx.fillText(`Final Score: ${score.innerHTML}`, w/2, h/2+48);
             gameOverCtx.fillText('Press Q to restart', w/2, h/2+72);
 
+            // congratulate user for hitting a high score
             if (Number(hscore.innerHTML) > Number(oldHigh)) {
                 gameOverCtx.fillStyle = '#FFFF00';
                 gameOverCtx.fillText('NEW HIGH SCORE!!!', w/2, h/2+120);
+                // still congratulate, but add a snarky message for not
+                // maintaining the high score before death
                 if (Number(score.innerHTML) != Number(hscore.innerHTML)) {
                     gameOverCtx.fillStyle = '#000000';
                     gameOverCtx.font = 'bold 18px Roboto Mono';
@@ -210,6 +215,7 @@ let mainLoop = function() {
             spawnToxicFood();
         if (playCounter % 45 == 0)
             toxicFoods.pop();
+
         // check if snake has eaten toxic food
         for (let i = 0; i < toxicFoods.length; i++) {
             if (realX == toxicFoods[i][0] && realY == toxicFoods[i][1]) {
@@ -236,8 +242,9 @@ let mainLoop = function() {
         if (!dead) {
             let prevLevel = level;
             level = Math.floor(score.innerHTML/20);
-            console.log(level); // for debugging
+            // console.log(level); // for debugging
 
+            // show new level notification if necessary
             if (level != prevLevel)
                 counterSnapshot = playCounter;
             if (playCounter <= counterSnapshot+30) {
@@ -329,10 +336,9 @@ function pairInArray(arr, x, y) {
         snake[snake.length-1][0] == x &&
         snake[snake.length-1][1] == y)
         return false;
-    for (let i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr.length; i++)
         if (arr[i][0] == x && arr[i][1] == y)
             return true;
-    }
     return false;
 }
 
